@@ -8,17 +8,31 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
     <style>
+      body {
+        background-color: white;
+      }
+
+      .container-fluid {
+        padding-left: 30px;
+        padding-right: 30px;
+        max-width: 1350px;
+      }
+
       h1 {
         font-weight: bold;
         font-size: 2.3em;
       }
 
       h2 {
-
+        font-size: 1.2em;
+        text-transform: uppercase;
+        opacity: 0.85;
       }
 
-      h2 {
-        margin-bottom: 30px; font-size: 1.7em
+      h4 {
+        text-transform: uppercase;
+        font-size: 1.3em;
+        opacity: 0.85;
       }
 
       a, a:hover, a:active, a:visited, a:focus {
@@ -31,30 +45,96 @@
         margin-bottom: 40px;
         line-height: 30px;
       }
+
+      #activities {
+        margin-top: 125px;
+      }
+
+      @media (max-width: 700px) {
+        #activities .col-md-3 {
+          margin-top: 75px;
+        }
+
+        #activities {
+          margin-top: 75px;
+        }
+      }
+
+      #activities p {
+        margin-bottom: 30px;
+      }
+
+      #activities img {
+        width: 200px;
+        display: block;
+        margin: auto;
+        border: 1px solid #eee;
+        border-radius: 2px;
+      }
+
+      #footer {
+        margin-top: 125px;
+      }
+
+      #development img {
+        width: 120px;
+        display: inline-block;
+        border: 0px;
+      }
+
+      #header {
+        margin: 0;
+        width: 100%;
+        background-color: #1e58ff1a;
+        padding-bottom: 25px;
+      }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 text-xs-center">
-          <img style="margin-bottom: 30px; margin-top: 20px; width: 250px" src="logo.png">
+    <div id="header" class="text-xs-center">
+      <img style="margin-bottom: 30px; margin-top: 20px; width: 100px; display: inline-block" src="logo.png">
+      <h1 style="display: inline-block">12 Moons</h1>
+      <h2>Software company based in Paris</h2>
+    </div>
 
-          <h1>12 Moons</h1>
-
-          <h2>We build software for startups</h1>
-
-          <p style="margin-bottom: 30px">
-            <a href="mailto:hello@12moons.io">hello@12moons.io</a><br>
-            Based in Paris.
+    <div class="container-fluid text-xs-center">
+      <div id="activities" class="row">
+        <div class="col-md-3">
+          <h4>Selecteev</h4>
+          <p>
+            Projects selection platform used by multiple incubators and accelerators around the world.
           </p>
+          <a target="_BLANK" href="https://selecteev.io"><img src="selecteev.png"></a>
+        </div>
+
+        <div id="development" class="col-md-3">
+          <h4>Software development</h4>
+          <p>
+            We do full-stack software development for early stage startups and help create great products.
+          </p>
+          <img src="agricool.png">
+          <img src="numa.png">
+          <img src="thefamily.png">
+        </div>
+
+        <div class="col-md-3">
+          <h4>Cryptocurrency mining & consulting</h4>
+          <p>Looking for small scale mining operations consultation and setup services? We can help!</p>
+          <img src="mining.jpg">
+        </div>
+
+        <div class="col-md-3">
+          <h4>Request Server</h4>
+          <p>
+            The easiest way to create a cloud server. Run a command, pay in Ether, get your server running in 2 minutes.
+          </p>
+          <a target="_BLANK" href="https://requestserver.cf"><img src="requestserver.png"></a>
         </div>
       </div>
-      <div class="row" style="margin-bottom: 40px">
-        <div class="col-sm-3 col-sm-offset-3">
-          <a href="https://numa.co/" rel="nofollow"><img src="numa.png" style="max-width: 100%"></a>
-        </div>
-        <div class="col-sm-3">
-          <a href="http://www.agricool.co/" rel="nofollow"><img src="agricool.png" style="max-width: 100%"></a>
+
+      <div id="footer" class="row">
+        <div class="col-sm-12">
+          <a href="mailto:hello@12moons.io">hello@12moons.io</a><br>
         </div>
       </div>
     </div>
