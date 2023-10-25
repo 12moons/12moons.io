@@ -6,9 +6,6 @@
 </head>
 <body>
     <h1>Camera Feed</h1>
-
-    <p id="log"></p>
-
     <video id="videoFeed" autoplay playsinline></video>
 
     <script>
@@ -27,8 +24,11 @@
             let devices = await navigator.mediaDevices.enumerateDevices();
             const cameras = devices.filter(device => device.kind === "videoinput");
 
+            console.log('devices', devices)
+            console.log('cameras', cameras)
+
             cameras.forEach(camera => {
-                document.getElementById('log').innerHTML += 'forEach:' + camera.label + '<br>';
+                console.log('forEach:', camera.label)
                 if (isBackCameraLabel(camera.label)) {
                     backCameras.push(camera);
                 } else {
@@ -36,8 +36,8 @@
                 }
             });
 
-            document.getElementById('log').innerHTML += 'frontCameras:' + frontCameras + '<br>';
-            document.getElementById('log').innerHTML += 'backCameras:' + backCameras + '<br>';
+            console.log('frontCameras=', frontCameras)
+            console.log('backCameras=', backCameras)
 
             return {
                 frontCameras,
