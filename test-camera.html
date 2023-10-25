@@ -25,6 +25,7 @@
             const cameras = devices.filter(device => device.kind === "videoinput");
 
             cameras.forEach(camera => {
+                console.log('forEach:', camera.label)
                 if (isBackCameraLabel(camera.label)) {
                     backCameras.push(camera);
                 } else {
