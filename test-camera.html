@@ -6,6 +6,9 @@
 </head>
 <body>
     <h1>Camera Feed</h1>
+
+    <p id="log"></p>
+
     <video id="videoFeed" autoplay playsinline></video>
 
     <script>
@@ -25,7 +28,7 @@
             const cameras = devices.filter(device => device.kind === "videoinput");
 
             cameras.forEach(camera => {
-                console.log('forEach:', camera.label)
+                document.getElementById('log').innerHTML += 'forEach:' + camera.label + '<br>';
                 if (isBackCameraLabel(camera.label)) {
                     backCameras.push(camera);
                 } else {
@@ -33,8 +36,8 @@
                 }
             });
 
-            console.log('frontCameras=', frontCameras)
-            console.log('backCameras=', backCameras)
+            document.getElementById('log').innerHTML += 'frontCameras:' + frontCameras + '<br>';
+            document.getElementById('log').innerHTML += 'backCameras:' + backCameras + '<br>';
 
             return {
                 frontCameras,
