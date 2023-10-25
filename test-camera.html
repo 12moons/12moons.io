@@ -80,6 +80,10 @@
                 }
             });
 
+            // Sort cameras by their labels
+            frontCameras.sort((a, b) => a.label.localeCompare(b.label));
+            backCameras.sort((a, b) => a.label.localeCompare(b.label));
+
             return {
                 frontCameras,
                 backCameras
