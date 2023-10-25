@@ -2,68 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Camera Test</title>
+    <title>Camera Display</title>
 </head>
 <body>
-
-    <h1>Camera Test</h1>
-
-    <video id="videoElement" width="640" height="480" autoplay></video>
+    <h1>Camera Feed</h1>
+    <video id="videoFeed" autoplay></video>
 
     <script>
-        let currentStream;
-        let selectedCameraId;
-        const videoElement = document.getElementById("videoElement");
+        // Keywords for identifying back-facing cameras
+        const backCameraKeywords = ["rear", "back", /*... (other keywords) ...*/ "задня", "stražnja", "belakang", "बैक"];
 
-        function stopMediaTracks(stream) {
-            stream.getTracks().forEach(track => {
-                track.stop();
+        function isBackCameraLabel(label) {
+            const lowercaseLabel = label.toLowerCase();
+            return backCameraKeywords.some(keyword => lowercaseLabel.includes(keyword));
+        }
+
+        async function getCameraDevices() {
+            const frontCameras = [];
+            const backCameras = [];
+
+            let devices = await navigator.mediaDevices.enumerateDevices();
+            const cameras = devices.filter(device => device.kind === "videoinput");
+
+            cameras.forEach(camera => {
+                if (isBackCameraLabel(camera.label)) {
+                    backCameras.push(camera);
+                } else {
+                    frontCameras.push(camera);
+                }
             });
+
+            return {
+                frontCameras,
+                backCameras
+            };
         }
 
-        async function openCamera(constraints) {
-            if (currentStream) {
-                stopMediaTracks(currentStream);
+        async function initCamera() {
+            const videoFeed = document.getElementById('videoFeed');
+            const { frontCameras, backCameras } = await getCameraDevices();
+            let selectedCamera = null;
+
+            if (backCameras.length > 0) {
+                selectedCamera = backCameras[0];
+            } else if (frontCameras.length > 0) {
+                selectedCamera = frontCameras[0];
             }
 
-            currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-            videoElement.srcObject = currentStream;
+            if (selectedCamera) {
+                const constraints = {
+                    video: {
+                        deviceId: selectedCamera.deviceId,
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    },
+                    audio: false
+                };
 
-            const track = currentStream.getVideoTracks()[0];
-            const capabilities = track.getCapabilities();
-            return 'torch' in capabilities;
-        }
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                videoFeed.srcObject = stream;
 
-        async function selectAppropriateCamera() {
-            const defaultConstraints = { video: { facingMode: { ideal: 'environment' } } };
-            const hasTorch = await openCamera(defaultConstraints);
-
-            if (hasTorch) {
-                const track = currentStream.getVideoTracks()[0];
-                selectedCameraId = track.getSettings().deviceId;
-                return;
-            }
-
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            for (const device of devices) {
-                if (device.kind === 'videoinput') {
-                    const constraints = { video: { deviceId: device.deviceId } };
-                    const hasTorch = await openCamera(constraints);
-                    if (hasTorch) {
-                        selectedCameraId = device.deviceId;
-                        return;
-                    }
+                if (!isBackCameraLabel(selectedCamera.label)) {
+                    videoFeed.style.transform = "scaleX(-1)";
                 }
             }
-
-            if (!selectedCameraId) {
-                const constraints = { video: {} };
-                await openCamera(constraints);
-            }
         }
 
-        selectAppropriateCamera().catch(error => {
-            console.error("Error in selecting the camera:", error);
+        // Initialize the camera on page load
+        window.addEventListener('load', () => {
+            initCamera();
         });
     </script>
 </body>
