@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Camera Test</title>
+</head>
+<body>
+
+    <h1>Camera Test</h1>
+
+    <video id="videoElement" width="640" height="480" autoplay></video>
+
+    <script>
+        let currentStream;
+        let selectedCameraId;
+        const videoElement = document.getElementById("videoElement");
+
+        function stopMediaTracks(stream) {
+            stream.getTracks().forEach(track => {
+                track.stop();
+            });
+        }
+
+        async function openCamera(constraints) {
+            if (currentStream) {
+                stopMediaTracks(currentStream);
+            }
+
+            currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+            videoElement.srcObject = currentStream;
+
+            const track = currentStream.getVideoTracks()[0];
+            const capabilities = track.getCapabilities();
+            return 'torch' in capabilities;
+        }
+
+        async function selectAppropriateCamera() {
+            const defaultConstraints = { video: { facingMode: { ideal: 'environment' } } };
+            const hasTorch = await openCamera(defaultConstraints);
+
+            if (hasTorch) {
+                const track = currentStream.getVideoTracks()[0];
+                selectedCameraId = track.getSettings().deviceId;
+                return;
+            }
+
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            for (const device of devices) {
+                if (device.kind === 'videoinput') {
+                    const constraints = { video: { deviceId: device.deviceId } };
+                    const hasTorch = await openCamera(constraints);
+                    if (hasTorch) {
+                        selectedCameraId = device.deviceId;
+                        return;
+                    }
+                }
+            }
+
+            if (!selectedCameraId) {
+                const constraints = { video: {} };
+                await openCamera(constraints);
+            }
+        }
+
+        selectAppropriateCamera().catch(error => {
+            console.error("Error in selecting the camera:", error);
+        });
+    </script>
+</body>
+</html>
