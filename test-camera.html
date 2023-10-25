@@ -21,6 +21,12 @@
             const frontCameras = [];
             const backCameras = [];
 
+            // Request media stream to trigger permission dialog
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: "environment" } });
+            
+            // Stop the stream right away after obtaining permissions
+            stream.getTracks().forEach(track => track.stop());
+
             let devices = await navigator.mediaDevices.enumerateDevices();
             const cameras = devices.filter(device => device.kind === "videoinput");
 
